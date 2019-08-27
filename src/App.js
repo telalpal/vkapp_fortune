@@ -1,46 +1,62 @@
 import React from 'react';
-import connect from '@vkontakte/vkui-connect';
 import { View } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
-import Persik from './panels/Persik';
+import Wheel from './panels/Wheel';
+import data from './data';
 
 class App extends React.Component {
-	constructor(props) {
-		super(props);
+    constructor(props) {
+        super(props);
 
-		this.state = {
-			activePanel: 'home',
-			fetchedUser: null,
-		};
-	}
+        this.state = {
+            activePanel: 'home',
+            modal: null,
+            day: null,
+        };
+    }
 
-	componentDidMount() {
-		connect.subscribe((e) => {
-			switch (e.detail.type) {
-				case 'VKWebAppGetUserInfoResult':
-					this.setState({ fetchedUser: e.detail.data });
-					break;
-				default:
-					console.log(e.detail.type);
-			}
-		});
-		connect.send('VKWebAppGetUserInfo', {});
-	}
+    go = (e) => {
+        this.setState({ activePanel: e.currentTarget.dataset.to })
+    };
 
-	go = (e) => {
-		this.setState({ activePanel: e.currentTarget.dataset.to })
-	};
+    setModal = (modal) => {
+        this.setState({modal})
+    }
 
-	render() {
-		return (
-			<View activePanel={this.state.activePanel}>
-				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
-				<Persik id="persik" go={this.go} />
-			</View>
-		);
-	}
+    setDay = (day) => {
+        this.setState({day})
+    }
+
+    getDefaultDay = () => {
+        return "2";
+    }
+
+    render() {
+        const availableDays = Object.keys(data);
+        const day = this.state.day || this.getDefaultDay();
+        const dayDescription = data[day].description;
+        const choisesData = data[day].choises;
+        return (
+            <View activePanel={this.state.activePanel} modal={this.state.modal}>
+                <Home
+                    id="home"
+                    go={this.go}
+                    availableDays={availableDays}
+                    setDay={this.setDay}
+                    selectedDay={day}
+                    dayDescription={dayDescription}
+                />
+                <Wheel
+                    id="wheel"
+                    go={this.go}
+                    setModal={this.setModal}
+                    data={choisesData}
+                />
+            </View>
+        );
+    }
 }
 
 export default App;

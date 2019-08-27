@@ -1,41 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Button, Group, Div, Avatar, PanelHeader } from '@vkontakte/vkui';
+import { Panel, Button, Div, PanelHeader, FormLayout, Select, Footer } from '@vkontakte/vkui';
 
-const Home = ({ id, go, fetchedUser }) => (
-	<Panel id={id}>
-		<PanelHeader>Example</PanelHeader>
-		{fetchedUser &&
-		<Group title="User Data Fetched with VK Connect">
-			<ListItem
-				before={fetchedUser.photo_200 ? <Avatar src={fetchedUser.photo_200}/> : null}
-				description={fetchedUser.city && fetchedUser.city.title ? fetchedUser.city.title : ''}
-			>
-				{`${fetchedUser.first_name} ${fetchedUser.last_name}`}
-			</ListItem>
-		</Group>}
 
-		<Group title="Navigation Example">
-			<Div>
-				<Button size="xl" level="2" onClick={go} data-to="persik">
-					Show me the Persik, please
-				</Button>
-			</Div>
-		</Group>
-	</Panel>
+const Home = ({ id, go, availableDays, setDay, selectedDay, dayDescription }) => (
+    <Panel id={id}>
+        <PanelHeader>Лунная Фортуна</PanelHeader>
+        <FormLayout>
+            <Select 
+                top="Выберите лунный день"
+                defaultValue={selectedDay}
+                onChange={({target}) => setDay(target.value)}
+            >
+                {
+                    availableDays.map((day) => {
+                        return (<option value={day} key={day}>{`Лунный день ${day}`}</option>)
+                    })
+                })
+            </Select>
+        </FormLayout>
+        <Div>
+            <Button size="xl" level="2" onClick={go} data-to="wheel">
+                Нажми
+            </Button>
+        </Div>
+        <Footer>{dayDescription}</Footer>
+    </Panel>
 );
 
 Home.propTypes = {
-	id: PropTypes.string.isRequired,
-	go: PropTypes.func.isRequired,
-	fetchedUser: PropTypes.shape({
-		photo_200: PropTypes.string,
-		first_name: PropTypes.string,
-		last_name: PropTypes.string,
-		city: PropTypes.shape({
-			title: PropTypes.string,
-		}),
-	}),
+    id: PropTypes.string.isRequired,
+    go: PropTypes.func.isRequired,
+    selectedDay: PropTypes.string.isRequired,
+    setDay: PropTypes.func.isRequired,
+    availableDays: PropTypes.arrayOf(PropTypes.string).isRequired,
+    dayDescription: PropTypes.string.isRequired,
 };
 
 export default Home;

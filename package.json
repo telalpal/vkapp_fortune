@@ -7,7 +7,7 @@
   "scripts": {
     "start": "cross-env PORT=10888 react-scripts start",
     "build": "react-scripts build",
-    "prebuild": "npm run build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
   "keywords": [],
@@ -27,7 +27,8 @@
     "core-js": "^3.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "two.js": "^0.7.0-beta.3"
   },
   "browserslist": [
     ">0.2%",
