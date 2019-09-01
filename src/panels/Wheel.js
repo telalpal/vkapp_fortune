@@ -11,10 +11,11 @@ import {
     ModalRoot,
     ModalCard
 } from '@vkontakte/vkui';
-import './Wheel.css';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import { wheelFactory } from '../wheelUtils';
+
+import './../index.css';
 
 const osname = platform();
 
@@ -39,6 +40,9 @@ class Wheel extends React.Component {
         });
 
         const words = this.props.data.map(choice => choice.caption);
+        // empty sector
+        words.push('');
+
         this.wheel.setWords(words);
         this.wheel.drawWheel();
     }
@@ -46,11 +50,12 @@ class Wheel extends React.Component {
     handleSpin = () => {
         this.setState({ spinEnabled: false });
         this.wheel.spin(Math.random());
-        // this.wheel.spin(2.99);
     }
 
     handleWheelStop = (word) => {
-        const bonus = this.props.data.find(el => el.caption === word);
+        const bonus = word === '' ? '' : this.props.data.find(el => el.caption === word);
+        const title = word === '' ? 'Тебе выпал пустой сектор!' : `Тебе выпало ${word}`;
+
 
         const modal = (
             <ModalRoot activeModal="results_modal_card">
@@ -58,10 +63,10 @@ class Wheel extends React.Component {
                     id="results_modal_card"
                     onClose={this.closeDetailsModal}
                     // icon={<Icon56MoneyTransferOutline />}
-                    title={`Тебе выпало ${word}`}
+                    title={title}
                     caption={bonus.text}
                     actions={[{
-                        title: 'Ясно понятно',
+                        title: 'Ок',
                         type: 'primary',
                         action: this.closeDetailsModal,
                     }]}
@@ -86,7 +91,7 @@ class Wheel extends React.Component {
                     </HeaderButton>}
                 >
                     Лунная Фортуна
-                        </PanelHeader>
+                </PanelHeader>
                 <div id="wheelContainer" />
                 <Div>
                     <Button level="commerce" size="xl" onClick={this.handleSpin} disabled={!this.state.spinEnabled}>Крутить!</Button>

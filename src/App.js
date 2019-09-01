@@ -5,6 +5,8 @@ import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
 import Wheel from './panels/Wheel';
 import data from './data';
+import {appDescription} from './constants';
+
 
 class App extends React.Component {
     constructor(props) {
@@ -13,7 +15,7 @@ class App extends React.Component {
         this.state = {
             activePanel: 'home',
             modal: null,
-            day: null,
+            day: '',
         };
     }
 
@@ -29,15 +31,11 @@ class App extends React.Component {
         this.setState({day})
     }
 
-    getDefaultDay = () => {
-        return "2";
-    }
-
     render() {
         const availableDays = Object.keys(data);
-        const day = this.state.day || this.getDefaultDay();
-        const dayDescription = data[day].description;
-        const choisesData = data[day].choises;
+        const day = this.state.day;
+        const dayDescription = day ? data[day].description : appDescription;
+        const choisesData = day ? data[day].choises : [];
         return (
             <View activePanel={this.state.activePanel} modal={this.state.modal}>
                 <Home

@@ -2,29 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Panel, Button, Div, PanelHeader, FormLayout, Select, Footer } from '@vkontakte/vkui';
 
+import './../index.css';
 
 const Home = ({ id, go, availableDays, setDay, selectedDay, dayDescription }) => (
     <Panel id={id}>
         <PanelHeader>Лунная Фортуна</PanelHeader>
         <FormLayout>
             <Select 
-                top="Выберите лунный день"
-                defaultValue={selectedDay}
                 onChange={({target}) => setDay(target.value)}
+                placeholder='Выберите лунный день'
+                value={selectedDay}
             >
                 {
                     availableDays.map((day) => {
-                        return (<option value={day} key={day}>{`Лунный день ${day}`}</option>)
+                        return (
+                            <option value={day} key={day}>{`Лунный день ${day}`}</option>
+                        )
                     })
                 })
             </Select>
         </FormLayout>
         <Div>
-            <Button size="xl" level="2" onClick={go} data-to="wheel">
-                Нажми
+            <Button size="xl" level="commerce" onClick={go} data-to="wheel" disabled={selectedDay ? false : true}>
+                Получить предсказание
             </Button>
         </Div>
-        <Footer>{dayDescription}</Footer>
+        <Footer className={'Description'}>{dayDescription} </Footer>
     </Panel>
 );
 

@@ -159,7 +159,10 @@ export const wheelFactory = mountElem => {
             arc.rotation = angle;
             arc.noStroke();
             arc.fill = COLORS[i % numColors];
-
+            
+            // empty sector shold be white colored, hardcoded for now TODO
+            arc.fill = word === '' ? '#ffffff' : arc.fill;
+            
             const textVertex = {
                 x:
                     center.x +
