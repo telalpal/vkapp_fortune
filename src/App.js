@@ -35,7 +35,7 @@ class App extends React.Component {
         const availableDays = Object.keys(data);
         const day = this.state.day;
         const dayDescription = day ? data[day].description : appDescription;
-        const choisesData = day ? data[day].choises : [];
+        const choicesData = day ? data[day].choices : [];
         return (
             <View activePanel={this.state.activePanel} modal={this.state.modal}>
                 <Home
@@ -50,7 +50,7 @@ class App extends React.Component {
                     id="wheel"
                     go={this.go}
                     setModal={this.setModal}
-                    data={choisesData}
+                    data={choicesData}
                 />
             </View>
         );
