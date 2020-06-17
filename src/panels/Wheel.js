@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
     Panel,
     PanelHeader,
-    HeaderButton,
+    PanelHeaderButton,
     platform,
     IOS,
     Button,
@@ -56,14 +56,13 @@ class Wheel extends React.Component {
         const bonus = word === '' ? '' : this.props.data.find(el => el.caption === word);
         const title = word === '' ? 'Тебе выпал пустой сектор!' : `Тебе выпало ${word}`;
 
-
         const modal = (
             <ModalRoot activeModal="results_modal_card">
                 <ModalCard
                     id="results_modal_card"
                     onClose={this.closeDetailsModal}
                     // icon={<Icon56MoneyTransferOutline />}
-                    title={title}
+                    header={title}
                     caption={bonus.text}
                     actions={[{
                         title: 'Ок',
@@ -86,15 +85,15 @@ class Wheel extends React.Component {
         return (
             <Panel id={this.props.id}>
                 <PanelHeader
-                    left={<HeaderButton onClick={this.props.go} data-to="home">
+                    left={<PanelHeaderButton onClick={this.props.go} data-to="home">
                         {osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}
-                    </HeaderButton>}
+                    </PanelHeaderButton>}
                 >
                     Лунная Фортуна
                 </PanelHeader>
                 <div id="wheelContainer" />
                 <Div>
-                    <Button level="commerce" size="xl" onClick={this.handleSpin} disabled={!this.state.spinEnabled}>Крутить!</Button>
+                    <Button mode="commerce" size="xl" onClick={this.handleSpin} disabled={!this.state.spinEnabled}>Крутить!</Button>
                 </Div>
             </Panel>
         )

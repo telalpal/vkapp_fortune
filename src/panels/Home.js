@@ -23,7 +23,7 @@ const Home = ({ id, go, availableDays, setDay, selectedDay, dayDescription }) =>
             </Select>
         </FormLayout>
         <Div>
-            <Button size="xl" level="commerce" onClick={go} data-to="wheel" disabled={selectedDay ? false : true}>
+            <Button size="xl" mode="commerce" onClick={go} data-to="wheel" disabled={!selectedDay}>
                 Получить предсказание
             </Button>
         </Div>

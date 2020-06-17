@@ -14,6 +14,10 @@ export const COLORS = [
 export const PI = Math.PI;
 export const TAU = PI * 2;
 
+const tickerColor = 'SteelBlue';
+const emptySectorColor = 'Gainsboro';
+
+
 const degToRad = deg => deg / 180 * PI;
 
 const getCoordOnCircle = (r, angleInRad, { cx, cy }) => {
@@ -94,6 +98,7 @@ export const wheelFactory = mountElem => {
             0,
             2 * PI
         );
+        arc.fill = tickerColor;
         arc.noStroke();
 
         return arc;
@@ -125,6 +130,7 @@ export const wheelFactory = mountElem => {
             pointD.x,
             pointD.y
         );
+        path.fill = tickerColor;
         path.noStroke();
 
         return path;
@@ -144,13 +150,14 @@ export const wheelFactory = mountElem => {
             x: width / 2,
             y: radius + xOffset,
         };
+
         group = two.makeGroup();
 
         words.map((word, i, arr) => {
             const angle = rotationUnit * i - (PI + rotationUnit) / 2;
             const arc = two.makeArcSegment(
-                center.x,
-                center.y,
+                0,
+                0,
                 0,
                 radius,
                 0,
@@ -161,15 +168,13 @@ export const wheelFactory = mountElem => {
             arc.fill = COLORS[i % numColors];
             
             // empty sector shold be white colored, hardcoded for now TODO
-            arc.fill = word === '' ? '#ffffff' : arc.fill;
+            arc.fill = word === '' ? emptySectorColor : arc.fill;
             
             const textVertex = {
                 x:
-                    center.x +
                     (radius - radius * ratios.edgeDist) *
                     Math.cos(angle + rotationUnit / 2),
                 y:
-                    center.y +
                     (radius - radius * ratios.edgeDist) *
                     Math.sin(angle + rotationUnit / 2),
             };
@@ -182,9 +187,7 @@ export const wheelFactory = mountElem => {
 
             return group.add(arc, text);
         });
-
         group.translation.set(center.x, center.y);
-        group.center();
         drawTicker();
 
         two.update();
