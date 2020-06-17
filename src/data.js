@@ -1,4 +1,4 @@
-const data = {
+const defaultData = {
     1: {
         choices:[
             {
@@ -3296,4 +3296,4 @@ const data = {
     }
 }
 
-export default data;
+export default defaultData;

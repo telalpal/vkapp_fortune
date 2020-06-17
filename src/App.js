@@ -1,10 +1,10 @@
 import React from 'react';
-import { View } from '@vkontakte/vkui';
+import { View, ScreenSpinner } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
 import Wheel from './panels/Wheel';
-import data from './data';
+import defaultData from './data';
 import {appDescription} from './constants';
 
 
@@ -16,7 +16,33 @@ class App extends React.Component {
             activePanel: 'home',
             modal: null,
             day: '',
+            allDaysData: {},
+            popout: null,
         };
+    }
+
+    componentDidMount() {
+        this.setState({popout: <ScreenSpinner/>});
+
+        fetch('https://gist.githubusercontent.com/ntelnova/dab0cb49cf93852da85b0c4a48b2a1c0/raw/data.json', {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-store',
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((gistData) => {
+                this.setState({allDaysData: gistData})
+            })
+            .catch((error) => {
+                console.error('Gist call error:', error);
+                console.warn('Using static data (probably obsolete.)')
+                this.setState({allDaysData: defaultData})
+            })
+            .finally(() => {
+                this.setState({popout: null})
+            });
     }
 
     go = (e) => {
@@ -32,12 +58,13 @@ class App extends React.Component {
     }
 
     render() {
-        const availableDays = Object.keys(data);
-        const day = this.state.day;
-        const dayDescription = day ? data[day].description : appDescription;
-        const choicesData = day ? data[day].choices : [];
+        const {allDaysData, day, popout} = this.state;
+
+        const availableDays = Object.keys(allDaysData);
+        const dayDescription = day ? allDaysData[day].description : appDescription;
+        const choicesData = day ? allDaysData[day].choices : [];
         return (
-            <View activePanel={this.state.activePanel} modal={this.state.modal}>
+            <View activePanel={this.state.activePanel} modal={this.state.modal} popout={popout}>
                 <Home
                     id="home"
                     go={this.go}
