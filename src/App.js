@@ -5,7 +5,6 @@ import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
 import Wheel from './panels/Wheel';
 import defaultData from './data';
-import {appDescription} from './constants';
 
 
 class App extends React.Component {
@@ -17,6 +16,7 @@ class App extends React.Component {
             modal: null,
             day: '',
             allDaysData: {},
+            appDescription: '',
             popout: null,
         };
     }
@@ -33,12 +33,12 @@ class App extends React.Component {
                 return response.json();
             })
             .then((gistData) => {
-                this.setState({allDaysData: gistData})
+                this.setState({allDaysData: gistData['days'], appDescription: gistData['appDescription']})
             })
             .catch((error) => {
                 console.error('Gist call error:', error);
                 console.warn('Using static data (probably obsolete.)')
-                this.setState({allDaysData: defaultData})
+                this.setState({allDaysData: defaultData['days'], appDescription: defaultData['appDescription']})
             })
             .finally(() => {
                 this.setState({popout: null})
@@ -58,7 +58,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {allDaysData, day, popout} = this.state;
+        const {allDaysData, day, popout, appDescription} = this.state;
 
         const availableDays = Object.keys(allDaysData);
         const dayDescription = day ? allDaysData[day].description : appDescription;
